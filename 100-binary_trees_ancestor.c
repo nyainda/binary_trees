@@ -1,55 +1,30 @@
 #include "binary_trees.h"
-binary_tree_t *recurse_for_ancestor(binary_tree_t *root,
-	const binary_tree_t *first, const binary_tree_t *second);
+
 /**
- * binary_trees_ancestor - find lowest common ancestor
- * @first: first node to find ancestor for
- * @second: second node to find ancestor for
- *
- * Return: pointer to lowest common ancestor; NULL on failure
+ * binary_trees_ancestor - finds the lowest common ancestor of two nodes
+ * @first: pointer to the first node
+ * @second: pointer to the second node
+ * Return: pointer to the lowest common ancestor node of the two given nodes
  */
+
 binary_tree_t *binary_trees_ancestor(const binary_tree_t *first,
-	const binary_tree_t *second)
+				     const binary_tree_t *second)
 {
-	binary_tree_t *root = NULL;
+	binary_tree_t *tmp;
 
-	if (!first || !second)
+	if (first == NULL || second == NULL)
 		return (NULL);
-
-	/* find root node */
-	root = (binary_tree_t *)first;
-	while (root->parent != NULL)
-		root = root->parent;
-
-	/* perform lowest common anscestor detection */
-	return (recurse_for_ancestor(root, first, second));
-}
-/**
- * recurse_for_ancestor - recursive component to find LCA
- * @root: pointer to root of tree
- * @first: pointer to one child
- * @second: pointer to other child
- *
- * Return: pointer to LCA
- */
-binary_tree_t *recurse_for_ancestor(binary_tree_t *root,
-	const binary_tree_t *first, const binary_tree_t *second)
-{
-	binary_tree_t *leftLCA = NULL, *rightLCA = NULL;
-
-	if (root == NULL || first == NULL || second == NULL)
-		return (NULL);
-
-	if (root == first || root == second)
-		return (root);
-
-	leftLCA = recurse_for_ancestor(root->left, first, second);
-	rightLCA = recurse_for_ancestor(root->right, first, second);
-
-	if (leftLCA && rightLCA)
-		return (root);
-
-	if (leftLCA != NULL)
-		return (leftLCA);
-	return (rightLCA);
+	tmp = (binary_tree_t *)second;
+	while (first)
+	{
+		while (second)
+		{
+			if (first == second)
+				return ((binary_tree_t *)first);
+			second = second->parent;
+		}
+		second = tmp;
+		first = first->parent;
+	}
+	return (NULL);
 }
